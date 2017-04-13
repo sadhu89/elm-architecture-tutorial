@@ -1,6 +1,6 @@
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onInput)
+import Html.Events exposing (onInput, onClick)
 import Char exposing (..)
 
 main =
@@ -20,12 +20,13 @@ type alias Model =
   , password : String
   , passwordAgain : String
   , age : String
+  , submitted : Bool
   }
 
 
 model : Model
 model =
-  Model "" "" "" ""
+  Model "" "" "" "" False
 
 
 
@@ -37,6 +38,7 @@ type Msg
     | Password String
     | PasswordAgain String
     | Age String
+    | Submit
 
 
 update : Msg -> Model -> Model
@@ -54,6 +56,9 @@ update msg model =
     Age age ->
       { model | age = age }
 
+    Submit ->
+      { model | submitted = True }
+
 
 -- VIEW
 
@@ -65,7 +70,8 @@ view model =
     , input [ type_ "password", placeholder "Password", onInput Password ] []
     , input [ type_ "password", placeholder "Re-enter Password", onInput PasswordAgain ] []
     , input [ type_ "text", placeholder "Age", onInput Age ] []
-    , viewValidation model
+    , button [ onClick Submit ] [ text "Submit" ]
+    , if model.submitted == True then viewValidation model else text ""
     ]
 
 
