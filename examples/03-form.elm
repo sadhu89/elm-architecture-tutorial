@@ -19,12 +19,13 @@ type alias Model =
   { name : String
   , password : String
   , passwordAgain : String
+  , age : String
   }
 
 
 model : Model
 model =
-  Model "" "" ""
+  Model "" "" "" ""
 
 
 
@@ -35,6 +36,7 @@ type Msg
     = Name String
     | Password String
     | PasswordAgain String
+    | Age String
 
 
 update : Msg -> Model -> Model
@@ -49,6 +51,8 @@ update msg model =
     PasswordAgain password ->
       { model | passwordAgain = password }
 
+    Age age ->
+      { model | age = age }
 
 
 -- VIEW
@@ -60,6 +64,7 @@ view model =
     [ input [ type_ "text", placeholder "Name", onInput Name ] []
     , input [ type_ "password", placeholder "Password", onInput Password ] []
     , input [ type_ "password", placeholder "Re-enter Password", onInput PasswordAgain ] []
+    , input [ type_ "text", placeholder "Age", onInput Age ] []
     , viewValidation model
     ]
 
@@ -75,7 +80,9 @@ viewValidation model =
       else if String.any Char.isDigit model.password == False ||
               String.any Char.isUpper model.password == False ||
               String.any Char.isLower model.password == False then
-          ("red", "Password should contains upper case, lower case, and numeric characters.")
+        ("red", "Password should contains upper case, lower case, and numeric characters.")
+      else if Result.withDefault -1 (String.toInt model.age) < 0  then
+        ("red", "Age should be a positive number.")
       else
         ("green", "OK")
 
