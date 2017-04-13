@@ -1,7 +1,7 @@
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput)
-
+import Char exposing (..)
 
 main =
   Html.beginnerProgram
@@ -72,6 +72,10 @@ viewValidation model =
         ("red", "Passwords do not match!")
       else if String.length model.password < 8 then
         ("red", "Password should be at least 8 characters.")
+      else if String.any Char.isDigit model.password == False ||
+              String.any Char.isUpper model.password == False ||
+              String.any Char.isLower model.password == False then
+          ("red", "Password should contains upper case, lower case, and numeric characters.")
       else
         ("green", "OK")
 
